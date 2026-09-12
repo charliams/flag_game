@@ -239,28 +239,7 @@ function wire() {
   el.tierLabel = document.getElementById('tier-label');
 
   el.input.addEventListener('input', renderSuggestions);
-
-  /* Collapse the flag into a compact strip while the keyboard is open. Mobile
-   * browsers scroll the focused input into view above the keyboard, and on
-   * iOS in particular that scroll happens inside a "visual viewport" that
-   * position:sticky/fixed elements don't reliably track -- so the only robust
-   * fix is to make sure there's nothing left to scroll: shrink everything
-   * above the input to a size that already fits above the keyboard. */
-  el.input.addEventListener('focus', function () {
-    renderSuggestions();
-    document.body.classList.add('typing');
-    if (state.answer) render();
-  });
-  el.input.addEventListener('blur', function () {
-    /* Tapping a suggestion (or New flag/Give up) blurs the input on mousedown,
-     * before its own click event fires. Deferring the un-shrink a tick keeps
-     * the layout -- and whatever the user just tapped -- still under the
-     * pointer for that click, instead of yanking it away mid-tap. */
-    setTimeout(function () {
-      document.body.classList.remove('typing');
-      if (state.answer) render();
-    }, 0);
-  });
+  el.input.addEventListener('focus', renderSuggestions);
 
   el.suggest.addEventListener('click', function (e) {
     var b = e.target.closest('button[data-id]');

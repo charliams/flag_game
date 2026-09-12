@@ -89,7 +89,6 @@ button.primary {
   border: 1px solid var(--line);
   background: #84898f;
   line-height: 0;
-  width: 100%;
 }
 
 #board { display: block; width: 100%; height: auto; }
@@ -111,26 +110,6 @@ button.primary {
 }
 
 #count { font-size: 13px; color: var(--muted); margin: 0 0 14px; text-align: center; }
-
-/* --- typing (keyboard open) ---
- * Collapse the header and shrink the board to a small strip so the whole
- * page already fits above the keyboard -- the browser then has nothing left
- * to scroll to bring the focused input into view, so the flag can't get
- * carried off screen. See the focus/blur handlers in game.js. */
-
-body.typing header { display: none; }
-
-body.typing .stage {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-body.typing .board-frame { width: 72px; flex: none; }
-
-body.typing #progress { display: none; }
-
-body.typing #count { margin: 0; text-align: left; }
 
 /* --- entry --- */
 
