@@ -10,8 +10,8 @@ import { dirname, join } from 'node:path';
 const root = dirname(fileURLToPath(import.meta.url));
 const read = (p) => readFileSync(join(root, p), 'utf8');
 
-/* render.js defines the helpers flags.js calls at load time, so order matters. */
-const JS_FILES = ['src/render.js', 'src/flags.js', 'src/game.js'];
+/* render.js first: flag-art.js is data, game.js uses both at load time. */
+const JS_FILES = ['src/render.js', 'src/flag-art.js', 'src/game.js'];
 
 const js = JS_FILES.map((f) => `/* ===== ${f} ===== */\n${read(f)}`).join('\n');
 const css = read('src/style.css');

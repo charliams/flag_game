@@ -1,0 +1,18 @@
+{
+  "name": "flag-reveal",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Offline flag-deduction game. The built index.html has no dependencies; these are build and verification tools only.",
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "art": "node tools/fetch-flags.mjs",
+    "check": "node tools/verify.mjs && node tools/playtest.mjs && node tools/offline-test.mjs",
+    "sheet": "node tools/contact-sheet.mjs"
+  },
+  "devDependencies": {
+    "flag-icons": "^7.5.0",
+    "playwright": "^1.49.0",
+    "svgo": "^4.0.0"
+  }
+}

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Flag Reveal</title>
-<meta name="description" content="Offline flag guessing game. Guess a flag; every colour it shares with the hidden flag gets filled in.">
+<meta name="description" content="Offline flag guessing game. Guess a flag; wherever it matches the hidden flag, that part is uncovered.">
 <meta name="theme-color" content="#14161a">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
@@ -25,28 +25,28 @@
 
   <div id="menu" hidden>
     <h2>How to play</h2>
-    <p>A flag is hidden behind flat grey. Guess any country: every colour its flag
-    shares with the hidden one is unlocked, and those parts of the hidden flag fill
-    in with their real colour. Parts whose colour is still locked stay grey, and
-    neighbouring grey parts blend together &mdash; so the design only emerges as you
-    unlock colours. Guesses are unlimited.</p>
-    <p>The chips below the flag track each colour: <strong>&#10003;</strong> in the
-    answer, <strong>&#10005;</strong> not in it, faded means you have not tested it
-    yet. How many colours the answer has is never shown &mdash; work it out.</p>
+    <p>A flag is hidden behind flat grey. Guess any country, and wherever your
+    flag has the same colour <em>in the same place</em> as the hidden one, that
+    part is uncovered for good.</p>
+    <p>So guessing France against a flag with a white band down the middle
+    uncovers that middle strip &mdash; not every white part of the flag. Matching
+    the layout is what uncovers ground, not just sharing a colour. Guesses are
+    unlimited.</p>
     <h2>Flag set</h2>
     <div id="tiers">
       <button data-tier="1">Famous flags only &mdash; easiest</button>
       <button data-tier="2">Well-known flags</button>
       <button data-tier="3">Every flag &mdash; all sovereign states</button>
     </div>
-    <p>Changing the set starts a new flag. Emblems and coats of arms are drawn as
-    simplified stand-ins, but always in the flag's real colours.</p>
+    <p>Changing the set starts a new flag.</p>
     <button class="icon-btn" id="menu-close">Close</button>
   </div>
 
-  <div id="board"></div>
+  <div class="board-frame">
+    <canvas id="board" width="4" height="3" aria-label="The hidden flag" role="img"></canvas>
+  </div>
+  <div id="progress"><span id="bar"></span></div>
   <p id="count"></p>
-  <div id="palette"></div>
 
   <div id="result" class="result" hidden></div>
 
@@ -63,7 +63,7 @@
 
   <ul id="history"></ul>
 
-  <p style="margin-top:22px"><span id="stats"></span><br><span id="tier-label"></span></p>
+  <p class="foot"><span id="stats"></span><br><span id="tier-label"></span></p>
 </div>
 
 <div id="toast" hidden></div>

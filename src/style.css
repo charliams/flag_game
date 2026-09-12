@@ -29,7 +29,6 @@
 
 body {
   margin: 0;
-  padding: 0;
   background: var(--bg);
   color: var(--ink);
   font: 16px/1.45 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -37,30 +36,13 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-.wrap {
-  max-width: 520px;
-  margin: 0 auto;
-  padding: 12px 16px 40px;
-}
+.wrap { max-width: 520px; margin: 0 auto; padding: 12px 16px 40px; }
 
-header {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-  margin-bottom: 10px;
-}
+header { display: flex; align-items: baseline; gap: 10px; margin-bottom: 10px; }
+h1 { font-size: 19px; margin: 0; letter-spacing: -0.01em; flex: 1; }
 
-h1 {
-  font-size: 19px;
-  margin: 0;
-  letter-spacing: -0.01em;
-  flex: 1;
-}
-
-#stats, #tier-label {
-  font-size: 12px;
-  color: var(--muted);
-}
+.foot, #stats, #tier-label { font-size: 12px; color: var(--muted); }
+.foot { margin-top: 22px; }
 
 button {
   font: inherit;
@@ -83,85 +65,37 @@ button.primary {
   width: 100%;
 }
 
-.icon-btn {
-  min-height: 36px;
-  padding: 6px 10px;
-  font-size: 13px;
-}
+.icon-btn { min-height: 36px; padding: 6px 10px; font-size: 13px; }
 
-/* --- the flag itself --- */
+/* --- board --- */
 
-#board {
+.board-frame {
   border-radius: var(--radius);
   overflow: hidden;
   border: 1px solid var(--line);
-  background: var(--panel);
+  background: #84898f;
   line-height: 0;
 }
 
-.board-flag {
+#board { display: block; width: 100%; height: auto; }
+
+#progress {
+  height: 4px;
+  border-radius: 3px;
+  background: var(--line);
+  overflow: hidden;
+  margin: 10px 0 8px;
+}
+
+#bar {
   display: block;
-  width: 100%;
-  aspect-ratio: 3 / 2;
-  height: auto;
+  height: 100%;
+  width: 0;
+  background: var(--accent);
+  transition: width .35s ease;
 }
 
-/* Fallback for browsers without aspect-ratio: keeps the 3:2 box. */
-@supports not (aspect-ratio: 3 / 2) {
-  #board { position: relative; padding-top: 66.667%; }
-  .board-flag { position: absolute; inset: 0; width: 100%; height: 100%; }
-}
-
-#count {
-  font-size: 13px;
-  color: var(--muted);
-  margin: 8px 0 10px;
-  text-align: center;
-}
-
-/* --- palette --- */
-
-#palette {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 6px;
-  margin-bottom: 14px;
-}
-
-@media (min-width: 420px) {
-  #palette { grid-template-columns: repeat(4, 1fr); }
-}
-
-.chip {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 8px;
-  border: 1px solid var(--line);
-  border-radius: 9px;
-  background: var(--panel);
-  font-size: 12px;
-  min-width: 0;
-}
-
-.chip .swatch {
-  width: 14px;
-  height: 14px;
-  border-radius: 4px;
-  border: 1px solid rgba(0, 0, 0, .25);
-  flex: none;
-}
-
-.chip-name { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.chip-mark { font-weight: 700; flex: none; }
-
-.chip.unknown { opacity: .55; }
-.chip.unknown .swatch { filter: grayscale(1) opacity(.45); }
-.chip.hit { border-color: var(--hit); }
-.chip.hit .chip-mark { color: var(--hit); }
-.chip.miss .chip-name { text-decoration: line-through; opacity: .6; }
-.chip.miss .swatch { filter: grayscale(1) opacity(.35); }
-.chip.miss .chip-mark { color: var(--miss); }
+#count { font-size: 13px; color: var(--muted); margin: 0 0 14px; text-align: center; }
 
 /* --- entry --- */
 
@@ -180,27 +114,30 @@ button.primary {
 
 #guess:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
 
-#suggest {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin-top: 6px;
-}
+#suggest { display: flex; flex-direction: column; gap: 4px; margin-top: 6px; }
 
 #suggest button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   text-align: left;
   width: 100%;
 }
 
+#suggest button img {
+  width: 30px;
+  height: 22.5px;
+  object-fit: cover;
+  border-radius: 3px;
+  border: 1px solid var(--line);
+  flex: none;
+}
+
+#suggest button span:first-of-type { flex: 1; }
 #suggest button.used { opacity: .5; }
 .tick { font-size: 11px; color: var(--muted); }
 
-.row {
-  display: flex;
-  gap: 8px;
-  margin-top: 8px;
-}
-
+.row { display: flex; gap: 8px; margin-top: 8px; }
 .row button { flex: 1; font-size: 14px; }
 
 /* --- result --- */
@@ -242,6 +179,7 @@ button.primary {
 
 .thumb {
   width: 48px;
+  height: 36px;
   flex: none;
   line-height: 0;
   border-radius: 4px;
@@ -249,34 +187,13 @@ button.primary {
   border: 1px solid var(--line);
 }
 
-.thumb .flag { display: block; width: 100%; aspect-ratio: 3 / 2; height: auto; }
+.thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
 .guess-body { flex: 1; min-width: 0; }
 .guess-name { font-size: 14px; font-weight: 600; }
+.guess-gain { font-size: 12px; color: var(--hit); font-weight: 600; }
+.guess-gain.zero { color: var(--muted); font-weight: 400; }
 .guess-no { font-size: 12px; color: var(--muted); flex: none; }
-
-.minis { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
-
-.mini {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  font-size: 10px;
-  font-weight: 700;
-  padding: 2px 5px 2px 3px;
-  border-radius: 20px;
-  border: 1px solid var(--line);
-}
-
-.mini i {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  border: 1px solid rgba(0, 0, 0, .3);
-}
-
-.mini.hit { color: var(--hit); border-color: var(--hit); }
-.mini.miss { color: var(--miss); opacity: .7; }
 
 /* --- menu --- */
 
@@ -289,6 +206,7 @@ button.primary {
 }
 
 #menu h2 { font-size: 14px; margin: 0 0 8px; }
+#menu h2 + p { margin-top: 0; }
 #menu p { font-size: 13px; color: var(--muted); margin: 0 0 10px; }
 
 #tiers { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }

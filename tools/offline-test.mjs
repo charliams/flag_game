@@ -53,12 +53,23 @@ console.log('server stopped');
 await p.reload();
 await p.waitForTimeout(500);
 
-const alive = await p.evaluate(() => ({
-  flags: typeof FLAGS !== 'undefined' ? FLAGS.length : 0,
-  boardDrawn: !!document.querySelector('#board svg'),
-  answer: typeof state !== 'undefined' && state.answer ? state.answer.name : null
-}));
+/* The board is a canvas, so "it came up" means it has real pixels on it -- with
+ * nothing uncovered that is the flat hidden grey, which is exactly right. */
+const alive = await p.evaluate(() => {
+  const cv = document.getElementById('board');
+  let painted = false;
+  if (cv && cv.width > 1) {
+    const d = cv.getContext('2d').getImageData(0, 0, cv.width, cv.height).data;
+    for (let i = 3; i < d.length; i += 4) if (d[i] === 255) { painted = true; break; }
+  }
+  return {
+    flags: typeof FLAGS !== 'undefined' ? FLAGS.length : 0,
+    boardPainted: painted,
+    boardPx: cv ? cv.width : 0,
+    answer: typeof state !== 'undefined' && state.answer ? state.answer.name : null
+  };
+});
 console.log('after going offline:', JSON.stringify(alive));
 
 await browser.close();
-process.exit(alive.flags === 197 && alive.boardDrawn ? 0 : 1);
+process.exit(alive.flags === 197 && alive.boardPainted && alive.answer ? 0 : 1);
