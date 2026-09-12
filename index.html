@@ -103,6 +103,7 @@ button.primary {
   border: 1px solid var(--line);
   background: #84898f;
   line-height: 0;
+  width: 100%;
 }
 
 #board { display: block; width: 100%; height: auto; }
@@ -124,6 +125,26 @@ button.primary {
 }
 
 #count { font-size: 13px; color: var(--muted); margin: 0 0 14px; text-align: center; }
+
+/* --- typing (keyboard open) ---
+ * Collapse the header and shrink the board to a small strip so the whole
+ * page already fits above the keyboard -- the browser then has nothing left
+ * to scroll to bring the focused input into view, so the flag can't get
+ * carried off screen. See the focus/blur handlers in game.js. */
+
+body.typing header { display: none; }
+
+body.typing .stage {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+body.typing .board-frame { width: 72px; flex: none; }
+
+body.typing #progress { display: none; }
+
+body.typing #count { margin: 0; text-align: left; }
 
 /* --- entry --- */
 
@@ -990,7 +1011,28 @@ function wire() {
   el.tierLabel = document.getElementById('tier-label');
 
   el.input.addEventListener('input', renderSuggestions);
-  el.input.addEventListener('focus', renderSuggestions);
+
+  /* Collapse the flag into a compact strip while the keyboard is open. Mobile
+   * browsers scroll the focused input into view above the keyboard, and on
+   * iOS in particular that scroll happens inside a "visual viewport" that
+   * position:sticky/fixed elements don't reliably track -- so the only robust
+   * fix is to make sure there's nothing left to scroll: shrink everything
+   * above the input to a size that already fits above the keyboard. */
+  el.input.addEventListener('focus', function () {
+    renderSuggestions();
+    document.body.classList.add('typing');
+    if (state.answer) render();
+  });
+  el.input.addEventListener('blur', function () {
+    /* Tapping a suggestion (or New flag/Give up) blurs the input on mousedown,
+     * before its own click event fires. Deferring the un-shrink a tick keeps
+     * the layout -- and whatever the user just tapped -- still under the
+     * pointer for that click, instead of yanking it away mid-tap. */
+    setTimeout(function () {
+      document.body.classList.remove('typing');
+      if (state.answer) render();
+    }, 0);
+  });
 
   el.suggest.addEventListener('click', function (e) {
     var b = e.target.closest('button[data-id]');
