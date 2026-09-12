@@ -69,6 +69,20 @@ button.primary {
 
 /* --- board --- */
 
+/* Keeps the flag visible while the on-screen keyboard is open: mobile browsers
+ * auto-scroll the focused input above the keyboard, which would otherwise
+ * carry the board off the top of the screen. Requires no overflow:hidden/auto
+ * on .wrap or body between here and the viewport, or sticky stops working. */
+.stage {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--bg);
+  margin-top: -8px;
+  padding-top: 8px;
+}
+
 .board-frame {
   border-radius: var(--radius);
   overflow: hidden;
@@ -99,7 +113,7 @@ button.primary {
 
 /* --- entry --- */
 
-#entry { position: relative; }
+.field { position: relative; }
 
 #guess {
   width: 100%;
@@ -114,7 +128,24 @@ button.primary {
 
 #guess:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
 
-#suggest { display: flex; flex-direction: column; gap: 4px; margin-top: 6px; }
+#suggest {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 260px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 6px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .2);
+}
 
 #suggest button {
   display: flex;
@@ -122,15 +153,6 @@ button.primary {
   gap: 10px;
   text-align: left;
   width: 100%;
-}
-
-#suggest button img {
-  width: 30px;
-  height: 22.5px;
-  object-fit: cover;
-  border-radius: 3px;
-  border: 1px solid var(--line);
-  flex: none;
 }
 
 #suggest button span:first-of-type { flex: 1; }
