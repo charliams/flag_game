@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Flag Reveal</title>
+<meta name="description" content="Offline flag guessing game. Guess a flag; every colour it shares with the hidden flag gets filled in.">
+<meta name="theme-color" content="#14161a">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="icon" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Flag Reveal">
+<style>
+{{CSS}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Flag Reveal</h1>
+    <button class="icon-btn" id="menu-open" aria-label="Settings and how to play">How &amp; settings</button>
+  </header>
+
+  <div id="menu" hidden>
+    <h2>How to play</h2>
+    <p>A flag is hidden behind flat grey. Guess any country: every colour its flag
+    shares with the hidden one is unlocked, and those parts of the hidden flag fill
+    in with their real colour. Parts whose colour is still locked stay grey, and
+    neighbouring grey parts blend together &mdash; so the design only emerges as you
+    unlock colours. Guesses are unlimited.</p>
+    <p>The chips below the flag track each colour: <strong>&#10003;</strong> in the
+    answer, <strong>&#10005;</strong> not in it, faded means you have not tested it
+    yet. How many colours the answer has is never shown &mdash; work it out.</p>
+    <h2>Flag set</h2>
+    <div id="tiers">
+      <button data-tier="1">Famous flags only &mdash; easiest</button>
+      <button data-tier="2">Well-known flags</button>
+      <button data-tier="3">Every flag &mdash; all sovereign states</button>
+    </div>
+    <p>Changing the set starts a new flag. Emblems and coats of arms are drawn as
+    simplified stand-ins, but always in the flag's real colours.</p>
+    <button class="icon-btn" id="menu-close">Close</button>
+  </div>
+
+  <div id="board"></div>
+  <p id="count"></p>
+  <div id="palette"></div>
+
+  <div id="result" class="result" hidden></div>
+
+  <form id="entry" autocomplete="off">
+    <input id="guess" type="text" placeholder="Name a country&hellip;" autocomplete="off"
+           autocorrect="off" autocapitalize="words" spellcheck="false"
+           enterkeyhint="go" aria-label="Guess a country">
+    <div id="suggest" hidden></div>
+    <div class="row">
+      <button type="button" id="skip">New flag</button>
+      <button type="button" id="giveup">Give up</button>
+    </div>
+  </form>
+
+  <ul id="history"></ul>
+
+  <p style="margin-top:22px"><span id="stats"></span><br><span id="tier-label"></span></p>
+</div>
+
+<div id="toast" hidden></div>
+
+<script>
+{{JS}}
+</script>
+</body>
+</html>
