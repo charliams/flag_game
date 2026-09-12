@@ -42,19 +42,23 @@
     <button class="icon-btn" id="menu-close">Close</button>
   </div>
 
-  <div class="board-frame">
-    <canvas id="board" width="4" height="3" aria-label="The hidden flag" role="img"></canvas>
+  <div class="stage">
+    <div class="board-frame">
+      <canvas id="board" width="4" height="3" aria-label="The hidden flag" role="img"></canvas>
+    </div>
+    <div id="progress"><span id="bar"></span></div>
+    <p id="count"></p>
   </div>
-  <div id="progress"><span id="bar"></span></div>
-  <p id="count"></p>
 
   <div id="result" class="result" hidden></div>
 
   <form id="entry" autocomplete="off">
-    <input id="guess" type="text" placeholder="Name a country&hellip;" autocomplete="off"
-           autocorrect="off" autocapitalize="words" spellcheck="false"
-           enterkeyhint="go" aria-label="Guess a country">
-    <div id="suggest" hidden></div>
+    <div class="field">
+      <input id="guess" type="text" placeholder="Name a country&hellip;" autocomplete="off"
+             autocorrect="off" autocapitalize="words" spellcheck="false"
+             enterkeyhint="go" aria-label="Guess a country">
+      <div id="suggest" hidden></div>
+    </div>
     <div class="row">
       <button type="button" id="skip">New flag</button>
       <button type="button" id="giveup">Give up</button>

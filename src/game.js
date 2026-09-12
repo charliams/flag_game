@@ -219,7 +219,7 @@ function renderSuggestions() {
   state.guesses.forEach(function (g) { used[g.id] = true; });
   el.suggest.innerHTML = results.map(function (f) {
     return '<button type="button" data-id="' + f.id + '"' + (used[f.id] ? ' class="used"' : '') +
-      '><img alt="" src="' + svgUrl(f) + '"><span>' + f.name + '</span>' +
+      '><span>' + f.name + '</span>' +
       (used[f.id] ? '<span class="tick">guessed</span>' : '') + '</button>';
   }).join('');
   el.suggest.hidden = false;
