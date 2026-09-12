@@ -237,6 +237,7 @@ function wire() {
   el.stats = document.getElementById('stats');
   el.toast = document.getElementById('toast');
   el.tierLabel = document.getElementById('tier-label');
+  el.stage = document.querySelector('.stage');
 
   el.input.addEventListener('input', renderSuggestions);
   el.input.addEventListener('focus', renderSuggestions);
@@ -288,6 +289,22 @@ function wire() {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(function () { if (state.answer) render(); }, 120);
   });
+
+  /* On iOS Safari, opening the keyboard doesn't shrink the layout viewport --
+   * it pans a separate "visual viewport" over the page instead, and that pan
+   * isn't something position:sticky tracks. So .stage can still end up
+   * scrolled above the visible area even though it's pinned to the top of
+   * the (now partly hidden) layout viewport. Nudge it down by exactly how
+   * far the visual viewport has panned so it stays on screen -- this only
+   * repositions it, it never changes its size. */
+  if (window.visualViewport && el.stage) {
+    var vv = window.visualViewport;
+    var pinStage = function () {
+      el.stage.style.transform = vv.offsetTop ? 'translateY(' + vv.offsetTop + 'px)' : '';
+    };
+    vv.addEventListener('resize', pinStage);
+    vv.addEventListener('scroll', pinStage);
+  }
 }
 
 /* Rebuild the reveal mask from the saved guess list. */
