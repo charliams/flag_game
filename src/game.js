@@ -17,7 +17,10 @@ var state = {
   busy: false
 };
 
-var stats = { played: 0, won: 0, best: 0, streak: 0, bestStreak: 0 };
+/* dist: guess-count -> wins, buckets '1'..'5' then '6+'. totalGuesses: sum of
+ * guesses taken on wins, for the average -- kept separately from dist so the
+ * average doesn't need to unpack the '6+' bucket. */
+var stats = { played: 0, won: 0, best: 0, streak: 0, bestStreak: 0, totalGuesses: 0, dist: {} };
 
 /* --- persistence -------------------------------------------------------- */
 
@@ -114,11 +117,15 @@ function submitGuess(flag) {
 
     if (flag.id === state.answer.id) {
       state.done = true;
+      var n = state.guesses.length;
       stats.played++;
       stats.won++;
       stats.streak++;
       if (stats.streak > stats.bestStreak) stats.bestStreak = stats.streak;
-      if (!stats.best || state.guesses.length < stats.best) stats.best = state.guesses.length;
+      if (!stats.best || n < stats.best) stats.best = n;
+      stats.totalGuesses += n;
+      var bucket = n >= 6 ? '6+' : String(n);
+      stats.dist[bucket] = (stats.dist[bucket] || 0) + 1;
     }
     state.busy = false;
     save();
@@ -200,6 +207,30 @@ function render() {
   return drawing;
 }
 
+var DIST_BUCKETS = ['1', '2', '3', '4', '5', '6+'];
+
+function renderStatsPanel() {
+  var winPct = stats.played ? Math.round(stats.won / stats.played * 100) : 0;
+  var avg = stats.won ? stats.totalGuesses / stats.won : 0;
+
+  el.statPlayed.textContent = stats.played;
+  el.statWinPct.textContent = winPct + '%';
+  el.statStreak.textContent = stats.streak;
+  el.statBestStreak.textContent = stats.bestStreak;
+  el.statFewest.textContent = stats.best || '—';
+  el.statAvg.textContent = stats.won ? avg.toFixed(1) : '—';
+
+  var max = 0;
+  DIST_BUCKETS.forEach(function (b) { max = Math.max(max, stats.dist[b] || 0); });
+  el.statDist.innerHTML = DIST_BUCKETS.map(function (b) {
+    var n = stats.dist[b] || 0;
+    var w = max ? Math.max(n ? 6 : 0, Math.round(n / max * 100)) : 0;
+    return '<div class="dist-row"><span class="dist-label">' + b + '</span>' +
+      '<div class="dist-bar-track"><div class="dist-bar" style="width:' + w + '%"></div></div>' +
+      '<span class="dist-count">' + n + '</span></div>';
+  }).join('');
+}
+
 var TIER_NAMES = { 1: 'Famous flags', 2: 'Well known', 3: 'Every flag' };
 
 var flashTimer = null;
@@ -237,6 +268,14 @@ function wire() {
   el.stats = document.getElementById('stats');
   el.toast = document.getElementById('toast');
   el.tierLabel = document.getElementById('tier-label');
+  el.statsPanel = document.getElementById('stats-panel');
+  el.statPlayed = document.getElementById('stat-played');
+  el.statWinPct = document.getElementById('stat-winpct');
+  el.statStreak = document.getElementById('stat-streak');
+  el.statBestStreak = document.getElementById('stat-beststreak');
+  el.statFewest = document.getElementById('stat-fewest');
+  el.statAvg = document.getElementById('stat-avg');
+  el.statDist = document.getElementById('stat-dist');
 
   el.input.addEventListener('input', renderSuggestions);
   el.input.addEventListener('focus', renderSuggestions);
@@ -275,10 +314,28 @@ function wire() {
 
   document.getElementById('menu-open').addEventListener('click', function () {
     var m = document.getElementById('menu');
+    el.statsPanel.hidden = true;
     m.hidden = !m.hidden;
   });
   document.getElementById('menu-close').addEventListener('click', function () {
     document.getElementById('menu').hidden = true;
+  });
+
+  document.getElementById('stats-open').addEventListener('click', function () {
+    document.getElementById('menu').hidden = true;
+    el.statsPanel.hidden = !el.statsPanel.hidden;
+    if (!el.statsPanel.hidden) renderStatsPanel();
+  });
+  document.getElementById('stats-close').addEventListener('click', function () {
+    el.statsPanel.hidden = true;
+  });
+  document.getElementById('stats-reset').addEventListener('click', function () {
+    if (!confirm('Reset all stats? This cannot be undone.')) return;
+    stats.played = 0; stats.won = 0; stats.best = 0; stats.streak = 0;
+    stats.bestStreak = 0; stats.totalGuesses = 0; stats.dist = {};
+    save();
+    renderStatsPanel();
+    render();
   });
 
   /* The board is a canvas, so it has to be redrawn at the new pixel size when

@@ -234,6 +234,41 @@ button.primary {
 #tiers { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
 #tiers button { text-align: left; }
 
+/* --- stats --- */
+
+#stats-panel {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+  padding: 14px;
+  margin-bottom: 12px;
+}
+
+#stats-panel h2 { font-size: 14px; margin: 0 0 10px; }
+#stats-panel h3 { font-size: 12px; color: var(--muted); margin: 14px 0 8px; font-weight: 600; }
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  text-align: center;
+}
+
+.stat-cell {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 4px;
+}
+
+.stat-num { font-size: 20px; font-weight: 700; line-height: 1.2; }
+.stat-label { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+.dist-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 12px; }
+.dist-label { width: 18px; flex: none; color: var(--muted); text-align: right; }
+.dist-bar-track { flex: 1; background: var(--bg); border-radius: 4px; overflow: hidden; height: 18px; }
+.dist-bar { min-width: 3px; height: 100%; background: var(--accent); border-radius: 4px; }
+.dist-count { color: var(--muted); width: 18px; flex: none; text-align: left; }
+
 #toast {
   position: fixed;
   left: 50%;
