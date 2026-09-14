@@ -20,8 +20,27 @@
 
   <header>
     <h1>Flag Reveal</h1>
+    <button class="icon-btn" id="stats-open" aria-label="Player stats">Stats</button>
     <button class="icon-btn" id="menu-open" aria-label="Settings and how to play">How &amp; settings</button>
   </header>
+
+  <div id="stats-panel" hidden>
+    <h2>Your stats</h2>
+    <div class="stat-grid">
+      <div class="stat-cell"><div class="stat-num" id="stat-played">0</div><div class="stat-label">Played</div></div>
+      <div class="stat-cell"><div class="stat-num" id="stat-winpct">0%</div><div class="stat-label">Win rate</div></div>
+      <div class="stat-cell"><div class="stat-num" id="stat-streak">0</div><div class="stat-label">Streak</div></div>
+      <div class="stat-cell"><div class="stat-num" id="stat-beststreak">0</div><div class="stat-label">Best streak</div></div>
+      <div class="stat-cell"><div class="stat-num" id="stat-fewest">&mdash;</div><div class="stat-label">Fewest guesses</div></div>
+      <div class="stat-cell"><div class="stat-num" id="stat-avg">&mdash;</div><div class="stat-label">Avg. guesses/win</div></div>
+    </div>
+    <h3>Guesses per win</h3>
+    <div id="stat-dist"></div>
+    <div class="row">
+      <button class="icon-btn" id="stats-reset">Reset stats</button>
+      <button class="icon-btn" id="stats-close">Close</button>
+    </div>
+  </div>
 
   <div id="menu" hidden>
     <h2>How to play</h2>
