@@ -21,7 +21,7 @@
   <header>
     <h1>Flag Reveal</h1>
     <button class="icon-btn" id="stats-open" aria-label="Player stats">Stats</button>
-    <button class="icon-btn" id="menu-open" aria-label="Settings and how to play">How &amp; settings</button>
+    <button class="icon-btn" id="menu-open" aria-label="How to play">How</button>
   </header>
 
   <div id="stats-panel" hidden>
@@ -51,13 +51,6 @@
     uncovers that middle strip &mdash; not every white part of the flag. Matching
     the layout is what uncovers ground, not just sharing a colour. Guesses are
     unlimited.</p>
-    <h2>Flag set</h2>
-    <div id="tiers">
-      <button data-tier="1">Famous flags only &mdash; easiest</button>
-      <button data-tier="2">Well-known flags</button>
-      <button data-tier="3">Every flag &mdash; all sovereign states</button>
-    </div>
-    <p>Changing the set starts a new flag.</p>
     <button class="icon-btn" id="menu-close">Close</button>
   </div>
 
@@ -79,14 +72,13 @@
       <div id="suggest" hidden></div>
     </div>
     <div class="row">
-      <button type="button" id="skip">New flag</button>
       <button type="button" id="giveup">Give up</button>
     </div>
   </form>
 
   <ul id="history"></ul>
 
-  <p class="foot"><span id="stats"></span><br><span id="tier-label"></span></p>
+  <p class="foot"><span id="stats"></span></p>
 </div>
 
 <div id="toast" hidden></div>
