@@ -55,7 +55,7 @@ body {
 header { display: flex; align-items: baseline; gap: 10px; margin-bottom: 10px; }
 h1 { font-size: 19px; margin: 0; letter-spacing: -0.01em; flex: 1; }
 
-.foot, #stats, #tier-label { font-size: 12px; color: var(--muted); }
+.foot, #stats { font-size: 12px; color: var(--muted); }
 .foot { margin-top: 22px; }
 
 button {
@@ -245,9 +245,6 @@ button.primary {
 #menu h2 + p { margin-top: 0; }
 #menu p { font-size: 13px; color: var(--muted); margin: 0 0 10px; }
 
-#tiers { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
-#tiers button { text-align: left; }
-
 /* --- stats --- */
 
 #stats-panel {
@@ -307,7 +304,7 @@ button.primary {
   <header>
     <h1>Flag Reveal</h1>
     <button class="icon-btn" id="stats-open" aria-label="Player stats">Stats</button>
-    <button class="icon-btn" id="menu-open" aria-label="Settings and how to play">How &amp; settings</button>
+    <button class="icon-btn" id="menu-open" aria-label="How to play">How</button>
   </header>
 
   <div id="stats-panel" hidden>
@@ -337,13 +334,6 @@ button.primary {
     uncovers that middle strip &mdash; not every white part of the flag. Matching
     the layout is what uncovers ground, not just sharing a colour. Guesses are
     unlimited.</p>
-    <h2>Flag set</h2>
-    <div id="tiers">
-      <button data-tier="1">Famous flags only &mdash; easiest</button>
-      <button data-tier="2">Well-known flags</button>
-      <button data-tier="3">Every flag &mdash; all sovereign states</button>
-    </div>
-    <p>Changing the set starts a new flag.</p>
     <button class="icon-btn" id="menu-close">Close</button>
   </div>
 
@@ -365,14 +355,13 @@ button.primary {
       <div id="suggest" hidden></div>
     </div>
     <div class="row">
-      <button type="button" id="skip">New flag</button>
       <button type="button" id="giveup">Give up</button>
     </div>
   </form>
 
   <ul id="history"></ul>
 
-  <p class="foot"><span id="stats"></span><br><span id="tier-label"></span></p>
+  <p class="foot"><span id="stats"></span></p>
 </div>
 
 <div id="toast" hidden></div>
@@ -1007,7 +996,6 @@ function render() {
       ' · streak ' + stats.streak + ' (best ' + stats.bestStreak + ')' +
       (stats.best ? ' · fewest ' + stats.best : '')
     : '';
-  el.tierLabel.textContent = TIER_NAMES[state.tier] + ' · ' + pool().length + ' flags';
 
   return drawing;
 }
@@ -1035,8 +1023,6 @@ function renderStatsPanel() {
       '<span class="dist-count">' + n + '</span></div>';
   }).join('');
 }
-
-var TIER_NAMES = { 1: 'Famous flags', 2: 'Well known', 3: 'Every flag' };
 
 var flashTimer = null;
 function flash(msg) {
@@ -1072,7 +1058,6 @@ function wire() {
   el.suggest = document.getElementById('suggest');
   el.stats = document.getElementById('stats');
   el.toast = document.getElementById('toast');
-  el.tierLabel = document.getElementById('tier-label');
   el.statsPanel = document.getElementById('stats-panel');
   el.statPlayed = document.getElementById('stat-played');
   el.statWinPct = document.getElementById('stat-winpct');
@@ -1105,16 +1090,6 @@ function wire() {
 
   document.getElementById('giveup').addEventListener('click', function () {
     if (confirm('Reveal the answer? This counts as a loss.')) giveUp();
-  });
-  document.getElementById('skip').addEventListener('click', function () { newGame(); });
-
-  document.querySelectorAll('#tiers button').forEach(function (b) {
-    b.addEventListener('click', function () {
-      state.tier = parseInt(b.getAttribute('data-tier'), 10);
-      save();
-      newGame();
-      document.getElementById('menu').hidden = true;
-    });
   });
 
   document.getElementById('menu-open').addEventListener('click', function () {

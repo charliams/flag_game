@@ -202,7 +202,6 @@ function render() {
       ' · streak ' + stats.streak + ' (best ' + stats.bestStreak + ')' +
       (stats.best ? ' · fewest ' + stats.best : '')
     : '';
-  el.tierLabel.textContent = TIER_NAMES[state.tier] + ' · ' + pool().length + ' flags';
 
   return drawing;
 }
@@ -230,8 +229,6 @@ function renderStatsPanel() {
       '<span class="dist-count">' + n + '</span></div>';
   }).join('');
 }
-
-var TIER_NAMES = { 1: 'Famous flags', 2: 'Well known', 3: 'Every flag' };
 
 var flashTimer = null;
 function flash(msg) {
@@ -267,7 +264,6 @@ function wire() {
   el.suggest = document.getElementById('suggest');
   el.stats = document.getElementById('stats');
   el.toast = document.getElementById('toast');
-  el.tierLabel = document.getElementById('tier-label');
   el.statsPanel = document.getElementById('stats-panel');
   el.statPlayed = document.getElementById('stat-played');
   el.statWinPct = document.getElementById('stat-winpct');
@@ -300,16 +296,6 @@ function wire() {
 
   document.getElementById('giveup').addEventListener('click', function () {
     if (confirm('Reveal the answer? This counts as a loss.')) giveUp();
-  });
-  document.getElementById('skip').addEventListener('click', function () { newGame(); });
-
-  document.querySelectorAll('#tiers button').forEach(function (b) {
-    b.addEventListener('click', function () {
-      state.tier = parseInt(b.getAttribute('data-tier'), 10);
-      save();
-      newGame();
-      document.getElementById('menu').hidden = true;
-    });
   });
 
   document.getElementById('menu-open').addEventListener('click', function () {
